@@ -1,7 +1,5 @@
 console.debug("%cScripts.js loaded", "color: lightgreen;");
 
-gsap.registerPlugin(scrollTrigger);
-
 // Lenis setup
 function setupLenis() {
   lenis = new Lenis();
@@ -563,16 +561,16 @@ var _map = function() {
 }; // end map
 
 var _interactiveMap = function() {
-  if ($('.interactive-map-container').length) {
-    $('.legend-item').on('click', function() {
+  if ($('.interactive-map_wrap').length) {
+    $('.interactive-map_legend_item').on('click', function() {
       var zoneId = $(this).data('zone-id');
-      $(this).siblings().removeClass('active');
-      $(this).toggleClass('active');
+      $(this).siblings().removeClass('is-active');
+      $(this).toggleClass('is-active');
 
-      $('.interactive-map-container .zone').each(function(){
+      $('.interactive-map_inner .interactive-map_zone').each(function(){
         if ($(this).data('zone-id') == zoneId) {
-          $(this).siblings().removeClass('active');
-          $(this).toggleClass('active');
+          $(this).siblings().removeClass('is-active');
+          $(this).toggleClass('is-active');
         }
       });
     });
