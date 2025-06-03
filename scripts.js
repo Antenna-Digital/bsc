@@ -1,5 +1,7 @@
 console.debug("%cScripts.js loaded", "color: lightgreen;");
 
+gsap.registerPlugin(scrollTrigger);
+
 // Lenis setup
 function setupLenis() {
   lenis = new Lenis();
@@ -13,60 +15,6 @@ function setupLenis() {
   gsap.ticker.lagSmoothing(0);
 
   lenis.start();
-
-  let isPaused = false;
-
-  document.addEventListener('click', (e) => {
-    const navButton = e.target.closest('.w-nav-button');
-    const navWrap = e.target.closest('.nav_1_mobile_contain');
-
-    // Case 1: Toggle on button click
-    if (navButton) {
-      isPaused ? lenis.start() : lenis.stop();
-      isPaused = !isPaused;
-      return;
-    }
-
-    // Case 2: Resume only if click is inside nav wrap (not on button) and nav is open
-    if (navWrap && !navWrap.contains(navButton)) {
-      if (isPaused) {
-        lenis.start();
-        isPaused = false;
-      }
-    }
-  });
-
-  function trapScroll(el) {
-    el.addEventListener('wheel', (e) => {
-      const delta = e.deltaY;
-      const atTop = el.scrollTop <= 0;
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
-
-      if ((delta < 0 && atTop) || (delta > 0 && atBottom)) {
-        e.preventDefault();
-      }
-      // Allow scroll inside the element if it's not at an edge
-    }, { passive: false });
-
-    let startY = 0;
-
-    el.addEventListener('touchstart', (e) => {
-      startY = e.touches[0].clientY;
-    });
-
-    el.addEventListener('touchmove', (e) => {
-      const deltaY = startY - e.touches[0].clientY;
-      const atTop = el.scrollTop <= 0;
-      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
-
-      if ((deltaY < 0 && atTop) || (deltaY > 0 && atBottom)) {
-        e.preventDefault();
-      }
-    }, { passive: false });
-  }
-
-  const navScroll = document.querySelector('.nav_1_menu_scroll');
-  if (navScroll) trapScroll(navScroll);
 }
 
 /** Scroll Animations
@@ -260,6 +208,95 @@ function initScrollAnimations() {
 	});
 }
 
+var _pageLoad = function () {
+
+  var reveal_options = {
+    easing: 'ease',
+    duration: '600',
+    delay: '0'
+  };
+
+  $("body").attr({
+    "data-reveal-easing": reveal_options.easing,
+    "data-reveal-duration": reveal_options.duration,
+    "data-reveal-delay": reveal_options.delay,
+  });
+
+  /* ScrollMagic Usage */
+  // var controller = new ScrollMagic.Controller();
+
+  // $("[data-reveal]:not([data-reveal-snap])").each(function() {
+
+  // 	$(this).addClass("reveal-init");
+
+  // 	new ScrollMagic.Scene({
+  // 		triggerElement: this, // y value not modified, so we can use element as trigger as well
+  // 		offset: 50, // start a little later
+  // 		triggerHook: 0.95,
+  // 		reverse: false
+  // 	})
+  // 	.setClassToggle(this, "reveal-animate") // add class toggle
+  // 	.addTo(controller);
+  // });
+
+  /* GSAP Usage */
+  let tl = gsap.timeline(); // create timeline, similar to SM's controller, so we can add animations to it dynamically if we need to
+  const revealEls = gsap.utils.toArray('[data-reveal]:not([data-reveal-snap])');
+  revealEls.forEach((el) => {
+    tl.from(el, {
+      scrollTrigger: {
+        start: 'top bottom-=5%', // animate when top of element is 5% above the bottom of the viewport
+        trigger: el,
+        onEnter: () => {
+          $(el).addClass('reveal-animate');
+        }, // callback to activate animation only on first enter
+        // toggleClass: 'reveal-animate', // uncomment for animation on enter and re-enter
+      }
+    });
+  });
+  gsap.to('html', {
+    "--hero-opacity": 1,
+    scrollTrigger: {
+      trigger: '.hero-home_inner_wrap',
+      start: 'top top',
+      end: 'bottom 25%',
+      scrub: true
+    }
+  });
+
+  $(window).on('load', function(){
+    var hash = window.location.hash.replace('#', '');
+    if (hash) {
+      setTimeout(function(){
+        document.getElementById(hash).scrollIntoView({
+          behavior: 'smooth'
+        });
+      }, 500);
+    }
+
+    // $(window).one('scroll', function(){
+    // 	_map();
+    // });
+  });
+
+  // Sticky Header - add .stuck class to body on scroll
+  $(window).on('scroll', function() {
+    var $tScroll = $(this);
+    cdScroll($tScroll.scrollTop());
+  });
+
+  cdScroll($(window).scrollTop());
+
+  function cdScroll(s) {
+    if (s > 50) {
+      $("body").addClass("stuck");
+    } else {
+      $("body").removeClass("stuck");
+    }
+  }
+
+}; // end page load
+
 // Finsweet Stuff
 // https://finsweet.com/attributes/attributes-api
 function finsweetStuff() {
@@ -307,13 +344,256 @@ function finsweetStuff() {
   ]);
 }
 
+// Auto-Update Copyright Year
+function copyrightAutoUpdate() {
+  const currentYear = new Date().getFullYear();
+  $("[data-copyright-year]").html(currentYear);
+}
+
+var _swipers = function() {
+  $(".hero-home_slider.swiper").each(function () {
+    var sliderId = $(this).attr("id");
+    var sliderPrevEl = $(this).find('.swiper-button-prev');
+    var sliderNextEl = $(this).find('.swiper-button-next');
+    var toggleTitleEl = $(this).find('.swiper-hide-title');
+    var titleContainerEl = $(this).parent().find('.page-title-container');
+    toggleTitleEl.add(sliderPrevEl).add(sliderNextEl).on('mouseenter', function(){
+      $(titleContainerEl).addClass('hidden');
+      $(this).find('button').removeClass('icon-visible');
+      $(this).find('button').addClass('icon-invisible');
+    });
+    toggleTitleEl.add(sliderPrevEl).add(sliderNextEl).on('mouseleave', function(){
+      $(titleContainerEl).removeClass('hidden');
+      $(this).find('button').removeClass('icon-invisible');
+      $(this).find('button').addClass('icon-visible');
+    });
+    // console.log(sliderId);
+    return new Swiper(`#${sliderId}`, {
+      slidesPerView: 1,
+      speed: 800,
+      // autoHeight: true,
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      loop: true,
+      navigation: {
+        nextEl: `.${sliderNextEl[0].classList[0]}`,
+        prevEl: `.${sliderPrevEl[0].classList[0]}`,
+      },
+    });
+  });
+  $(".team-swiper.swiper").each(function () {
+    var sliderId = $(this).attr("id");
+    // console.log(sliderId);
+    return new Swiper(`#${sliderId}`, {
+      slidesPerView: 1,
+      speed: 800,
+      spaceBetween: 32,
+      grabCursor: true,
+      // autoHeight: true,
+      loop: false,
+      navigation: {
+        nextEl: `.swiper-button-next-${sliderId}`,
+        prevEl: `.swiper-button-prev-${sliderId}`,
+      },
+      scrollbar: {
+        el: '.swiper-scrollbar-team-swiper',
+        draggable: true,
+      },
+      breakpoints: {
+        800: {
+          slidesPerView: 2
+        },
+        1200: {
+          slidesPerView: 3
+        }
+      }
+    });
+  });
+};
+
+var _map = function() {
+  if ($('#map').length) {
+    // Create the script tag, set the appropriate attributes
+    // var script = document.createElement('script');
+    // script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDHUtCgNJ6CkrNtTIOlUAGzaVpMXPJQjBA&callback=initMap';
+    // script.async = true;
+
+    window.initMap = function() {
+      const centerLatLng = { lat: 37.41307555372046, lng: -122.05409066615627 };
+      const moffettCoords = [
+        {lat: 37.402656, lng: -122.045146},
+        {lat: 37.396008, lng: -122.046690},
+        {lat: 37.398974, lng: -122.056818},
+        {lat: 37.400951, lng: -122.058235},
+        {lat: 37.405417, lng: -122.056604},
+        {lat: 37.408502, lng: -122.069564},
+        {lat: 37.410377, lng: -122.073641},
+        {lat: 37.413343, lng: -122.073513},
+        {lat: 37.413891, lng: -122.082421},
+        {lat: 37.416661, lng: -122.082293},
+        {lat: 37.416933, lng: -122.086863},
+        {lat: 37.423546, lng: -122.086606},
+        {lat: 37.423546, lng: -122.078066},
+        {lat: 37.428590, lng: -122.078194},
+        {lat: 37.428658, lng: -122.068495},
+        {lat: 37.426545, lng: -122.057877},
+        {lat: 37.427942, lng: -122.055774},
+        {lat: 37.429169, lng: -122.056031},
+        {lat: 37.430294, lng: -122.051825},
+        {lat: 37.426204, lng: -122.049551},
+        {lat: 37.427499, lng: -122.043414},
+        {lat: 37.426681, lng: -122.034987},
+        {lat: 37.424738, lng: -122.027220},
+        {lat: 37.423307, lng: -122.027134},
+        {lat: 37.421807, lng: -122.022756},
+        {lat: 37.408650, lng: -122.027134},
+        {lat: 37.406128, lng: -122.026104},
+        {lat: 37.403196, lng: -122.026619},
+        {lat: 37.400605, lng: -122.035717},
+      ];
+      const markers = [
+        // [{ lat: 37.4132758, lng: -122.0540668 }, "Hangar 1"],
+        // [{ lat: 37.4113378, lng: -122.0592939 }, "Shenandoah Plaza"],
+        [{ lat: 37.41715508007898, lng: -122.06166991541467 }, "NASA Ames Campus", "nasa"],
+        [{ lat: 37.40985908175872, lng: -122.0540854770259 }, null, "berkeley"],
+        [{ lat: 37.42280357867831, lng: -122.06639937247499 }, "Google Bay View Campus", "google"],
+        [{ lat: 37.419244094098566, lng: -122.07362010538282 }, "Google Mountain View Campus", "google"],
+        [{ lat: 37.41167300872227, lng: -122.07128469723234 }, "Microsoft Silicon Valley Campus", "microsoft"],
+        [{ lat: 37.4091163918119, lng: -122.03327606293628 }, "Meta Sunnyvale Campus", "meta"],
+        [{ lat: 37.40788981736148, lng: -122.02917592163321 }, "Juniper Networks", "juniper"],
+        [{ lat: 37.40895965151502, lng: -122.036112222299 }, "Amazon", "amazon"],
+        [{ lat: 37.404020098594096, lng: -122.03451811632239 }, "Google", "google"],
+        [{ lat: 37.41508543056878, lng: -122.07514304683008 }, "Google North Bayshore", "google"],
+        [{ lat: 37.41614937686715, lng: -122.03414418323331 }, "Lockheed Martin", "lockheed"],
+        [{ lat: 37.401207766981685, lng: -122.04751868835328 }, "Samsung", 'samsung'],
+      ];
+      const markerIcons = {
+        'default': '/wp-content/uploads/map-marker.svg',
+        'google': '/wp-content/uploads/map-marker-google.svg',
+        'microsoft': '/wp-content/uploads/map-marker-microsoft.svg',
+        'meta': '/wp-content/uploads/map-marker-meta.svg',
+        'amazon': '/wp-content/uploads/map-marker-amazon.svg',
+        'nasa': '/wp-content/uploads/map-marker-nasa.svg',
+        'samsung': '/wp-content/uploads/map-marker-samsung.svg',
+        'lockheed': '/wp-content/uploads/map-marker-lockheed.svg',
+        'juniper': '/wp-content/uploads/map-marker-juniper.svg',
+        'berkeley': '/wp-content/uploads/berkeley-marker.svg'
+      };
+      const map = new google.maps.Map(document.getElementById("map"), {
+        mapId: "35bbde531ddc3a17",
+        center: centerLatLng,
+        zoom: 13.25,
+        disableDefaultUI: true,
+      });
+      // const oneMoffett = new google.maps.Polygon({
+      // 	paths: moffettCoords,
+      // 	strokeColor: "#000000",
+      // 	strokeOpacity: 0.8,
+      // 	strokeWeight: 2,
+      // 	fillColor: "#FFFFFF",
+      // 	fillOpacity: 0,
+      // 	map: map
+      // });
+      const infoWindow = new google.maps.InfoWindow();
+
+      markers.forEach(([position, title, markerType], i) => {
+        let markerIconURL = markerIcons['default'];
+        let markerScaledSize = new google.maps.Size(28, 40);
+        let markerOrigin = new google.maps.Point(0, 0);
+        let markerAnchor = new google.maps.Point(14, 40);
+        if (typeof markerType !== 'undefined') {
+          markerIconURL = markerIcons[`${markerType}`];
+          if (markerType == 'berkeley') {
+            markerScaledSize = new google.maps.Size(40, 40);
+            markerOrigin = new google.maps.Point(0, 0);
+            markerAnchor = new google.maps.Point(20, 20);
+          }
+        }
+        const marker = new google.maps.Marker({
+          position,
+          map,
+          optimized: false,
+          icon: {
+            url: markerIconURL,
+            scaledSize: markerScaledSize,
+            origin: markerOrigin,
+            anchor: markerAnchor,
+          }
+        });
+        if (title !== null) {
+          marker.setTitle(title);
+          // Add a click listener for each marker, and set up the info window.
+          marker.addListener("click", () => {
+            infoWindow.close();
+            infoWindow.setContent('<p>' + marker.getTitle() + '</p>');
+            infoWindow.open(marker.getMap(), marker);
+          });
+        }
+      });
+    };
+
+    var mapToWatch = document.getElementById('map');
+    var options = {
+      rootMargin: '100px',
+      threshold: 0
+    };
+
+    var observer = new IntersectionObserver(
+      function(entries, self) {
+        // Intersecting with Edge workaround https://calendar.perfplanet.com/2017/progressive-image-loading-using-intersection-observer-and-sqip/#comment-102838
+        var isIntersecting = typeof entries[0].isIntersecting === 'boolean' ? entries[0].isIntersecting : entries[0].intersectionRatio > 0
+        if (isIntersecting) {
+          var mapsJS = document.createElement('script')
+          mapsJS.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDHUtCgNJ6CkrNtTIOlUAGzaVpMXPJQjBA&callback=initMap';
+          mapsJS.async = true;
+          document.getElementsByTagName('head')[0].appendChild(mapsJS)
+          self.unobserve(mapToWatch)
+        }
+      },
+      options
+    )
+
+    observer.observe(mapToWatch);
+
+    // window.initMap = initMap;
+
+    // Append the 'script' element to 'body'
+    // document.body.appendChild(script);
+  }
+}; // end map
+
+var _interactiveMap = function() {
+  if ($('.interactive-map-container').length) {
+    $('.legend-item').on('click', function() {
+      var zoneId = $(this).data('zone-id');
+      $(this).siblings().removeClass('active');
+      $(this).toggleClass('active');
+
+      $('.interactive-map-container .zone').each(function(){
+        if ($(this).data('zone-id') == zoneId) {
+          $(this).siblings().removeClass('active');
+          $(this).toggleClass('active');
+        }
+      });
+    });
+  }
+}; // end interactive map
+
+
+
+
 // Init Function
 const init = () => {
 	console.debug("%cRun init", "color: lightgreen;");
 
+  _pageLoad();
 	setupLenis();
 	initScrollAnimations();
 	finsweetStuff();
+  copyrightAutoUpdate();
+  _swipers();
+  _map();
+  _interactiveMap();
 }; // end init
 
 $(window).on("load", init);
