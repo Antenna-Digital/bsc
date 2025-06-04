@@ -220,23 +220,6 @@ var _pageLoad = function () {
     "data-reveal-delay": reveal_options.delay,
   });
 
-  /* ScrollMagic Usage */
-  // var controller = new ScrollMagic.Controller();
-
-  // $("[data-reveal]:not([data-reveal-snap])").each(function() {
-
-  // 	$(this).addClass("reveal-init");
-
-  // 	new ScrollMagic.Scene({
-  // 		triggerElement: this, // y value not modified, so we can use element as trigger as well
-  // 		offset: 50, // start a little later
-  // 		triggerHook: 0.95,
-  // 		reverse: false
-  // 	})
-  // 	.setClassToggle(this, "reveal-animate") // add class toggle
-  // 	.addTo(controller);
-  // });
-
   /* GSAP Usage */
   let tl = gsap.timeline(); // create timeline, similar to SM's controller, so we can add animations to it dynamically if we need to
   const revealEls = gsap.utils.toArray('[data-reveal]:not([data-reveal-snap])');
@@ -410,7 +393,7 @@ var _swipers = function() {
 };
 
 var _map = function() {
-  if ($('#map').length) {
+  if ($('[data-map]').length) {
     // Create the script tag, set the appropriate attributes
     // var script = document.createElement('script');
     // script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDHUtCgNJ6CkrNtTIOlUAGzaVpMXPJQjBA&callback=initMap';
@@ -466,18 +449,18 @@ var _map = function() {
         [{ lat: 37.401207766981685, lng: -122.04751868835328 }, "Samsung", 'samsung'],
       ];
       const markerIcons = {
-        'default': '/wp-content/uploads/map-marker.svg',
-        'google': '/wp-content/uploads/map-marker-google.svg',
-        'microsoft': '/wp-content/uploads/map-marker-microsoft.svg',
-        'meta': '/wp-content/uploads/map-marker-meta.svg',
-        'amazon': '/wp-content/uploads/map-marker-amazon.svg',
-        'nasa': '/wp-content/uploads/map-marker-nasa.svg',
-        'samsung': '/wp-content/uploads/map-marker-samsung.svg',
-        'lockheed': '/wp-content/uploads/map-marker-lockheed.svg',
-        'juniper': '/wp-content/uploads/map-marker-juniper.svg',
-        'berkeley': '/wp-content/uploads/berkeley-marker.svg'
+        'default': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5278a46fd56373ffb_map-marker.svg',
+        'google': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a549359aa4dd81feb5_map-marker-google.svg',
+        'microsoft': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5453b8d8f3eb4d26a_map-marker-microsoft.svg',
+        'meta': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a59d208a228ecebd1b_map-marker-meta.svg',
+        'amazon': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a502253e3d26d7e0e2_map-marker-amazon.svg',
+        'nasa': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5ad715ade954d828c_map-marker-nasa.svg',
+        'samsung': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a500252d908d0821ef_map-marker-samsung.svg',
+        'lockheed': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a59ed80a8aeca5440a_map-marker-lockheed.svg',
+        'juniper': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5211b54cc9c9708b8_map-marker-juniper.svg',
+        'berkeley': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5e02506d8568f43d5_berkeley-marker.svg'
       };
-      const map = new google.maps.Map(document.getElementById("map"), {
+      const map = new google.maps.Map(document.querySelector('[data-map]'), {
         mapId: "35bbde531ddc3a17",
         center: centerLatLng,
         zoom: 13.25,
@@ -530,7 +513,7 @@ var _map = function() {
       });
     };
 
-    var mapToWatch = document.getElementById('map');
+    var mapToWatch = document.querySelector('[data-map]');
     var options = {
       rootMargin: '100px',
       threshold: 0
@@ -586,7 +569,7 @@ const init = () => {
 
   _pageLoad();
 	setupLenis();
-	initScrollAnimations();
+	// initScrollAnimations();
 	finsweetStuff();
   copyrightAutoUpdate();
   _swipers();
