@@ -362,8 +362,11 @@ var _swipers = function() {
       },
     });
   });
-  $(".team-swiper.swiper").each(function () {
+  $(".team-slider_slider.swiper").each(function () {
     var sliderId = $(this).attr("id");
+    var sliderPrevEl = $(this).find('.swiper-button-prev');
+    var sliderNextEl = $(this).find('.swiper-button-next');
+    var sliderScrollbar = $(this).find('.swiper-scrollbar');
     // console.log(sliderId);
     return new Swiper(`#${sliderId}`, {
       slidesPerView: 1,
@@ -373,11 +376,11 @@ var _swipers = function() {
       // autoHeight: true,
       loop: false,
       navigation: {
-        nextEl: `.swiper-button-next-${sliderId}`,
-        prevEl: `.swiper-button-prev-${sliderId}`,
+        nextEl: `.${sliderNextEl[0].classList[0]}`,
+        prevEl: `.${sliderPrevEl[0].classList[0]}`,
       },
       scrollbar: {
-        el: '.swiper-scrollbar-team-swiper',
+        el: `.${sliderScrollbar[0].classList[0]}`,
         draggable: true,
       },
       breakpoints: {
