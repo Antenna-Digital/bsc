@@ -563,6 +563,60 @@ var _interactiveMap = function() {
   }
 }; // end interactive map
 
+var _lightboxes = function() {
+
+  // Videos
+  $('.popup-video').magnificPopup({
+    //disableOn: 700,
+    type: 'iframe',
+    mainClass: 'mfp-fade',
+    removalDelay: 160,
+    preloader: false,
+    fixedContentPos: true
+  });
+
+  $('.popup-video-embed').magnificPopup({
+    type: 'inline',
+    mainClass: 'mfp-fade popup-embed-container',
+    removalDelay: 500,
+    callbacks: {
+      open: function() {
+        var vidID = this.currItem.src;
+        var vid = document.querySelector(vidID + " video");
+        vid.play();
+      }
+    }
+  });
+
+  // Inline Popup
+  $('.popup-inline').magnificPopup({
+    type: 'inline',
+    fixedContentPos: true,
+    mainClass: 'mfp-fade',
+    midClick: true, // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
+  });
+  $('.menu-button.popup a').magnificPopup({
+    type: 'inline',
+    fixedContentPos: true,
+    mainClass: 'mfp-fade',
+    midClick: true, // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
+  });
+
+  // Contact Popup
+  $('a[href="#contact"]').magnificPopup({
+    type: 'inline',
+    fixedContentPos: true,
+    mainClass: 'mfp-fade contact-container',
+    midClick: true, // Allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source in href.
+  });
+
+  // Custom Close Button
+  $(document).on("click", ".js-exit-popup", function() {
+    $.magnificPopup.close();
+  });
+
+}; // end lightboxes
+
 
 
 
@@ -571,13 +625,14 @@ const init = () => {
 	console.debug("%cRun init", "color: lightgreen;");
 
   _pageLoad();
-	setupLenis();
+	// setupLenis();
 	// initScrollAnimations();
 	finsweetStuff();
   copyrightAutoUpdate();
   _swipers();
   _map();
   _interactiveMap();
+  _lightboxes();
 }; // end init
 
 $(window).on("load", init);
