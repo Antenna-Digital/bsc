@@ -1,5 +1,7 @@
 console.debug("%cScripts.js loaded", "color: lightgreen;");
 
+let lenis;
+
 // Lenis setup
 function setupLenis() {
   lenis = new Lenis();
@@ -293,7 +295,7 @@ function finsweetStuff() {
       listInstances.forEach((list)=>{
         list.addHook("afterRender", (items) => {
           ScrollTrigger.refresh();
-          lenis.resize();
+          // lenis.resize();
         })
       });
 
@@ -617,6 +619,68 @@ var _lightboxes = function() {
 
 }; // end lightboxes
 
+var _playVideo = function() {
+  $(".hero-video_video_play").on('click', function(){
+    $('.hero-video_video_play').fadeOut();
+    $('.hero-video_video_overlay').fadeOut("slow");
+    $('#landing-video').get(0).play()
+  })
+}; // end playVideo
+
+var _cookiePageLoad = function() {
+  var $has_link = $("#ada_enter-site");
+  if ($has_link.length > 0 && !Cookies.get('shownPageLoad')) {
+    $("body").css({'overflow': 'hidden'});
+    $(".page-load_wrap").addClass("active");
+    $(".page_wrap").removeClass("active");
+  } else {
+    $(".page-load_wrap").addClass("active");
+    $(".page_wrap").removeClass("active");
+  }
+
+  // if a visitor doesn't wait for the video to end and clicks "Enter Site" then set a cookie and reload the page
+  $("#ada_enter-site").click(function() {
+    var inFifteenDays = new Date(new Date().getTime() + 15 * 24 * 60 * 60 * 1000);
+    Cookies.set('shownPageLoad', 'true', { expires: inFifteenDays }, '/');
+    // reload the page
+    location.reload();
+  });
+
+  // this is instead of cookies on the home page, which was having a cache issue.
+  // not really fussy about this as it feels like a hack, but it's site launch day and this is working.
+  // that said, unless I think of a better approach, it's likely to stay in place.
+  // effectively, it toggles the hideme class on an element in the template-home.php file
+  // hiding or showing the page load video or page content.
+  // once a cookie is found that says the visitor has seen the page load, this script shows the content and
+  // removes the page load because it was loading two headers with all the meta and such because of the
+  // way this was originally built, which had to change late in the game due to some client requests.
+  var $home_page_load = $(".page-load_wrap");
+  var $home_page_content = $(".page_wrap");
+  if ($home_page_load.length > 0 && !Cookies.get('shownPageLoad')) {
+    // try to detect a mobile device, and if detected just remove the page load section to clean up the home page
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|bot|googlebot|crawler|spider|robot|crawling|Chrome-Lighthouse/i.test(navigator.userAgent) ) {
+      $home_page_load.each(function(){
+        $(this).remove();
+      });
+    } else {
+      // otherwise toggle the classes to show the page load, and hide the content
+      $home_page_load.each(function(){
+        $(this).toggleClass('is-hidden');
+      });
+      $home_page_content.each(function(){
+        $(this).toggleClass('is-hidden');
+        $(this).remove();
+      });
+    }
+  } else {
+    // if the cookie is set then just remove the page load section to clean up the home page.
+    $home_page_load.each(function(){
+      $(this).remove();
+    });
+  }
+
+}; // end cookie page load
+
 
 
 
@@ -633,6 +697,8 @@ const init = () => {
   _map();
   _interactiveMap();
   _lightboxes();
+  _playVideo();
+  _cookiePageLoad();
 }; // end init
 
 $(window).on("load", init);
