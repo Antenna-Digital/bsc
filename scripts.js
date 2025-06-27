@@ -577,6 +577,14 @@ var _lightboxes = function() {
     fixedContentPos: true
   });
 
+  $('[href="#brochure-popup"]').magnificPopup({
+    type: 'inline',
+    mainClass: 'mfp-fade',
+    removalDelay: 160,
+    preloader: false,
+    fixedContentPos: true
+  });
+
   $('.popup-video-embed').magnificPopup({
     type: 'inline',
     mainClass: 'mfp-fade popup-embed-container',
@@ -690,7 +698,7 @@ const init = () => {
 
   _pageLoad();
 	// setupLenis();
-	// initScrollAnimations();
+	// initScrollAnimations();s
 	finsweetStuff();
   copyrightAutoUpdate();
   _swipers();
