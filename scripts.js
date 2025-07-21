@@ -635,6 +635,18 @@ var _playVideo = function() {
   })
 }; // end playVideo
 
+var _cookieConsent = function() {
+  var $can_cookies = $("#cookie-notice");
+  if ($can_cookies.length > 0 && !Cookies.get('cookieConsent')) {
+    $can_cookies.addClass('cookie-notice--active');
+    $can_cookies.find(".btn_main_wrap").click(function(e) {
+      e.preventDefault();
+      Cookies.set('cookieConsent', 'true', { expires: 30 });
+      $can_cookies.fadeOut(300);
+    });
+  }
+}; // end cookie consent
+
 var _cookiePageLoad = function() {
   var $has_link = $("#ada_enter-site");
   if ($has_link.length > 0 && !Cookies.get('shownPageLoad')) {
@@ -706,6 +718,7 @@ const init = () => {
   _interactiveMap();
   _lightboxes();
   _playVideo();
+  _cookieConsent();
   _cookiePageLoad();
 }; // end init
 
