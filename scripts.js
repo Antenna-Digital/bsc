@@ -454,16 +454,16 @@ var _map = function() {
         [{ lat: 37.401207766981685, lng: -122.04751868835328 }, "Samsung", 'samsung'],
       ];
       const markerIcons = {
-        'default': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5278a46fd56373ffb_map-marker.svg',
-        'google': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a549359aa4dd81feb5_map-marker-google.svg',
-        'microsoft': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5453b8d8f3eb4d26a_map-marker-microsoft.svg',
-        'meta': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a59d208a228ecebd1b_map-marker-meta.svg',
-        'amazon': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a502253e3d26d7e0e2_map-marker-amazon.svg',
-        'nasa': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5ad715ade954d828c_map-marker-nasa.svg',
-        'samsung': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a500252d908d0821ef_map-marker-samsung.svg',
-        'lockheed': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a59ed80a8aeca5440a_map-marker-lockheed.svg',
+        'default': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/696f9f8269bf628a35b4dec9_map-marker.svg',
+        'google': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/696f9f8253c4b57d9921efd8_map-marker-google.svg',
+        'microsoft': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/696f9f82270f169153aed331_map-marker-microsoft.svg',
+        'meta': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/696f9f825cd4d2dc27b2de5e_map-marker-meta.svg',
+        'amazon': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/696f9f8265b5beeeaf4ced87_map-marker-amazon.svg',
+        'nasa': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/696f9f8204f67db8e7fe174a_map-marker-nasa.svg',
+        'samsung': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/696f9f82d8fefb56d61eb61b_map-marker-samsung.svg',
+        'lockheed': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/696f9f8269d1947c4a10f32e_map-marker-lockheed.svg',
         'juniper': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5211b54cc9c9708b8_2c3efd0e1f276bac9077ee1773dad00a_map-marker-juniper.svg',
-        'berkeley': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5e02506d8568f43d5_berkeley-marker.svg'
+        'berkeley': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/696f9f82a8a9cf08631399b0_berkeley-marker.svg'
       };
       const map = new google.maps.Map(document.querySelector('[data-map]'), {
         mapId: "35bbde531ddc3a17",
