@@ -462,7 +462,7 @@ var _map = function() {
         'nasa': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5ad715ade954d828c_map-marker-nasa.svg',
         'samsung': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a500252d908d0821ef_map-marker-samsung.svg',
         'lockheed': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a59ed80a8aeca5440a_map-marker-lockheed.svg',
-        'juniper': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5211b54cc9c9708b8_map-marker-juniper.svg',
+        'juniper': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5211b54cc9c9708b8_2c3efd0e1f276bac9077ee1773dad00a_map-marker-juniper.svg',
         'berkeley': 'https://cdn.prod.website-files.com/682b3f5d34989031338d977a/684097a5e02506d8568f43d5_berkeley-marker.svg'
       };
       const map = new google.maps.Map(document.querySelector('[data-map]'), {
