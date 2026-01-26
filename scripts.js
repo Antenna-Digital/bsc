@@ -649,8 +649,13 @@ var _cookieConsent = function() {
 
 var _cookiePageLoad = function() {
   var $has_link = $("#ada_enter-site");
+  var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|bot|googlebot|crawler|spider|robot|crawling|Chrome-Lighthouse/i.test(navigator.userAgent);
+  
   if ($has_link.length > 0 && !Cookies.get('shownPageLoad')) {
-    $("body").css({'overflow': 'hidden'});
+    // Only prevent scrolling on desktop devices
+    if (!isMobile) {
+      $("body").css({'overflow': 'hidden'});
+    }
     $(".page-load_wrap").addClass("active");
     $(".page_wrap").removeClass("active");
   } else {
@@ -678,7 +683,7 @@ var _cookiePageLoad = function() {
   var $home_page_content = $(".page_wrap");
   if ($home_page_load.length > 0 && !Cookies.get('shownPageLoad')) {
     // try to detect a mobile device, and if detected just remove the page load section to clean up the home page
-    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|bot|googlebot|crawler|spider|robot|crawling|Chrome-Lighthouse/i.test(navigator.userAgent) ) {
+    if( isMobile ) {
       $home_page_load.each(function(){
         $(this).remove();
       });
